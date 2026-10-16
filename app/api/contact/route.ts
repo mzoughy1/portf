@@ -2,6 +2,7 @@ import { profile } from "@/content/profile";
 import { jsonError, jsonOk } from "@/lib/http";
 import { ipFromRequest, rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { supabaseSetupMessage } from "@/lib/supabase/errors";
 import { sendContactEmail } from "@/lib/email";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { contactSchema, fieldErrors } from "@/lib/validations";
@@ -54,8 +55,8 @@ export async function POST(request: Request) {
   });
 
   if (error) {
-    console.error("Contact insert failed.");
-    return jsonError(500, `The message was not saved. Email ${profile.email} instead.`);
+    console.error("Contact insert failed.", error.code);
+    return jsonError(500, supabaseSetupMessage(error));
   }
 
   const emailed = await sendContactEmail({

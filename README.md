@@ -58,7 +58,7 @@ The page renders without Supabase. Forms and live stats answer with a clear mess
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public | Browser key. RLS limits what it can do. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server only | Used by API routes. Never prefix it with `NEXT_PUBLIC_`. |
 | `NEXT_PUBLIC_CV_URL` | Public | Public URL of the CV PDF in the `assets` bucket |
-| `NEXT_PUBLIC_PHOTO_URL` | Public | Optional portrait in the same bucket |
+| `NEXT_PUBLIC_PHOTO_URL` | Public | Optional. A portrait is already at `/portrait.jpg` unless this URL is set |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public | Turnstile site key |
 | `TURNSTILE_SECRET_KEY` | Server only | Turnstile secret |
 | `RESEND_ENABLED` | Server | `true` sends mail. Anything else stores the message only. |
@@ -73,7 +73,7 @@ The page renders without Supabase. Forms and live stats answer with a clear mess
 3. In Project Settings → API, copy the project URL, the `anon` key, and the `service_role` key into `.env.local` (and later into Vercel).
 4. Confirm Storage has a public bucket named `assets`. The migration creates it.
 5. Upload `cv.pdf` into `assets`, open the file, and copy its public URL into `NEXT_PUBLIC_CV_URL`.
-6. Optional: upload a portrait and set `NEXT_PUBLIC_PHOTO_URL`. Use a file on this bucket so `next/image` can load it.
+6. Optional: replace `public/portrait.jpg`, or set `NEXT_PUBLIC_PHOTO_URL` to a file on this bucket so `next/image` can load it.
 
 ### What the database allows
 
@@ -115,7 +115,7 @@ The Resend sandbox sender (`onboarding@resend.dev`) only delivers to the address
 
 ## Content you still fill in
 
-- CV and photo: the env vars above. Until the CV URL is set, the download button stays disabled.
+- CV: set `NEXT_PUBLIC_CV_URL`. Until that URL is set, the download button stays disabled. The portrait is `public/portrait.jpg`.
 - Projects: add an `image` public URL on any object in `content/projects.ts`.
 - Availability: `availableForWork` in `content/profile.ts`.
 

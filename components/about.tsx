@@ -49,7 +49,7 @@ export function About() {
                 </div>
               )}
             </div>
-            <figcaption className="sr-only">Photo placeholder for {profile.name}</figcaption>
+            <figcaption className="sr-only">Portrait of {profile.name}</figcaption>
           </figure>
         </Reveal>
       </div>

@@ -79,7 +79,7 @@ export function Welcome() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
+    <div className="overlay">
       <button
         type="button"
         className="absolute inset-0 bg-[#10140f]/70"
@@ -91,7 +91,7 @@ export function Welcome() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="welcome-title"
-        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-line bg-surface shadow-[var(--shadow)]"
+        className="relative my-auto w-full max-w-lg overflow-hidden rounded-3xl border border-line bg-surface shadow-[var(--shadow)]"
       >
         <div className="flex items-center gap-2 border-b border-line px-4 py-3">
           <span className="size-2.5 rounded-full bg-[#ff8b7a]" aria-hidden="true" />

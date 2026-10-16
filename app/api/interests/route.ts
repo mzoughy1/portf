@@ -2,6 +2,7 @@ import { jsonError, jsonOk } from "@/lib/http";
 import { ipFromRequest, rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { normalizeStats } from "@/lib/stats";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { supabaseSetupMessage } from "@/lib/supabase/errors";
 import { fieldErrors, interestSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
@@ -44,8 +45,8 @@ export async function POST(request: Request) {
   });
 
   if (error) {
-    console.error("Visitor interest insert failed.");
-    return jsonError(500, "The tally was not saved. Please try again.");
+    console.error("Visitor interest insert failed.", error.code);
+    return jsonError(500, supabaseSetupMessage(error));
   }
 
   const { data, error: statsError } = await supabase.rpc("visitor_interest_stats");

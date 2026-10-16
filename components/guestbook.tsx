@@ -45,7 +45,7 @@ async function loadEntries(): Promise<{ configured: boolean; entries: Entry[]; e
     error?: string;
   };
   if (!response.ok || !payload.ok) {
-    return { configured: false, entries: [], error: payload.error || "The guestbook could not be loaded." };
+    return { configured: true, entries: [], error: payload.error || "The guestbook could not be loaded." };
   }
   return { configured: Boolean(payload.configured), entries: payload.entries ?? [] };
 }
@@ -144,17 +144,13 @@ export function Guestbook() {
             onChange={(event) => setMessage(event.target.value)}
           />
           <TurnstileWidget onToken={setToken} />
-          {!siteKey && process.env.NODE_ENV !== "production" ? (
-            <p className="text-sm text-muted">Spam check is skipped in local development until Turnstile keys are set.</p>
+          {!siteKey ? (
+            <p className="text-sm text-muted">
+              The spam check is off until the Turnstile keys are added. This is separate from Supabase, and the form
+              still sends.
+            </p>
           ) : null}
-          {!siteKey && process.env.NODE_ENV === "production" ? (
-            <p className="text-sm text-danger">Spam protection is not configured, so this form is paused. Email me instead.</p>
-          ) : null}
-          <button
-            type="submit"
-            className={buttonClass("solid")}
-            disabled={pending || (needsToken && !token) || (process.env.NODE_ENV === "production" && !siteKey)}
-          >
+          <button type="submit" className={buttonClass("solid")} disabled={pending || (needsToken && !token)}>
             {pending ? "Sending…" : "Leave a note"}
           </button>
           {status ? (
@@ -184,7 +180,7 @@ export function Guestbook() {
               The guestbook opens once Supabase is connected. You can still email {profile.email}.
             </p>
           ) : null}
-          {!loading && configured && entries.length === 0 ? (
+          {!loading && configured && !loadError && entries.length === 0 ? (
             <p className="text-muted">No notes yet. Leave the first one.</p>
           ) : null}
           <ul className="space-y-4">

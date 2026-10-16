@@ -20,5 +20,5 @@ export function getCvUrl() {
 }
 
 export function getPhotoUrl() {
-  return process.env.NEXT_PUBLIC_PHOTO_URL?.trim() || "";
+  return process.env.NEXT_PUBLIC_PHOTO_URL?.trim() || "/portrait.jpg";
 }

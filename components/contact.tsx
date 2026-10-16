@@ -159,17 +159,13 @@ export function Contact() {
             </div>
           </fieldset>
           <TurnstileWidget onToken={setToken} />
-          {!siteKey && process.env.NODE_ENV !== "production" ? (
-            <p className="text-sm text-muted">Spam check is skipped in local development until Turnstile keys are set.</p>
+          {!siteKey ? (
+            <p className="text-sm text-muted">
+              The spam check is off until the Turnstile keys are added. This is separate from Supabase, and the form
+              still sends.
+            </p>
           ) : null}
-          {!siteKey && process.env.NODE_ENV === "production" ? (
-            <p className="text-sm text-danger">Spam protection is not configured, so this form is paused. Email me instead.</p>
-          ) : null}
-          <button
-            type="submit"
-            className={buttonClass("solid")}
-            disabled={pending || (Boolean(siteKey) && !token) || (process.env.NODE_ENV === "production" && !siteKey)}
-          >
+          <button type="submit" className={buttonClass("solid")} disabled={pending || (Boolean(siteKey) && !token)}>
             {pending ? "Sending…" : "Send message"}
           </button>
           {status ? (

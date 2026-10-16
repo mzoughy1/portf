@@ -3,6 +3,7 @@ import { profile } from "@/content/profile";
 import { jsonError, jsonOk } from "@/lib/http";
 import { ipFromRequest, rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { supabaseSetupMessage } from "@/lib/supabase/errors";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { fieldErrors, guestbookSchema } from "@/lib/validations";
 
@@ -19,8 +20,8 @@ export async function GET() {
     .limit(50);
 
   if (error) {
-    console.error("Guestbook read failed.");
-    return jsonError(500, "The guestbook could not be loaded.");
+    console.error("Guestbook read failed.", error.code);
+    return jsonError(500, supabaseSetupMessage(error));
   }
 
   return jsonOk({ configured: true, entries: data ?? [] });
@@ -69,8 +70,8 @@ export async function POST(request: Request) {
   });
 
   if (error) {
-    console.error("Guestbook insert failed.");
-    return jsonError(500, "The note was not saved. Please try again.");
+    console.error("Guestbook insert failed.", error.code);
+    return jsonError(500, supabaseSetupMessage(error));
   }
 
   return jsonOk({});

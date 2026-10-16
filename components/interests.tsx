@@ -17,7 +17,7 @@ function selectionKey(intent: IntentId, topics: Topic[]) {
   return JSON.stringify({ intent, topics: [...topics].sort() });
 }
 
-async function loadStats(): Promise<{ configured: boolean; stats: VisitorStats } | null> {
+async function loadStats(): Promise<{ configured: boolean; stats: VisitorStats; error?: string } | null> {
   const browser = getBrowserClient();
   if (browser) {
     const { data, error } = await browser.rpc("visitor_interest_stats");
@@ -29,8 +29,15 @@ async function loadStats(): Promise<{ configured: boolean; stats: VisitorStats }
     ok?: boolean;
     configured?: boolean;
     stats?: unknown;
+    error?: string;
   };
-  if (!response.ok || !payload.ok) return null;
+  if (!response.ok || !payload.ok) {
+    return {
+      configured: true,
+      stats: normalizeStats(null),
+      error: payload.error || "Live stats could not be loaded.",
+    };
+  }
   return {
     configured: Boolean(payload.configured),
     stats: normalizeStats(payload.stats),
@@ -57,12 +64,14 @@ export function Interests() {
   const [message, setMessage] = useState("");
   const [stats, setStats] = useState<VisitorStats | null>(null);
   const [configured, setConfigured] = useState(true);
+  const [statsError, setStatsError] = useState("");
 
   const refresh = useCallback(async () => {
     const next = await loadStats();
     if (!next) return;
     setConfigured(next.configured);
     setStats(next.stats);
+    setStatsError(next.error ?? "");
   }, []);
 
   useEffect(() => {
@@ -201,7 +210,14 @@ export function Interests() {
             </p>
           ) : null}
         </div>
-        <StatsPanel configured={configured} total={stats?.total ?? 0} leader={leader} rows={rows} topics={stats?.topics ?? []} />
+        <StatsPanel
+          configured={configured}
+          problem={statsError}
+          total={stats?.total ?? 0}
+          leader={leader}
+          rows={rows}
+          topics={stats?.topics ?? []}
+        />
       </div>
     </Section>
   );
@@ -209,12 +225,14 @@ export function Interests() {
 
 function StatsPanel({
   configured,
+  problem,
   total,
   leader,
   rows,
   topics,
 }: {
   configured: boolean;
+  problem: string;
   total: number;
   leader: { percent: number; cameTo: string } | null;
   rows: { id: string; label: string; percent: number; count: number }[];
@@ -223,7 +241,9 @@ function StatsPanel({
   return (
     <aside className="rounded-3xl border border-line bg-surface p-6" aria-live="polite">
       <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Live stats</p>
-      {!configured ? (
+      {problem ? (
+        <p className="mt-4 text-sm leading-6 text-danger">{problem}</p>
+      ) : !configured ? (
         <p className="mt-4 text-muted">
           Live stats connect once Supabase is set up. A choice you make here still stays in this browser.
         </p>

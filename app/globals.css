@@ -119,9 +119,63 @@ body::before {
   }
 }
 
-body > * {
+@layer base {
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.overlay > [role="dialog"] {
   position: relative;
   z-index: 1;
+  width: min(32rem, 100%);
+  margin: auto;
+}
+
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cursor-light,
+.cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  opacity: 0;
+}
+
+.cursor-light {
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 70%, transparent) 0%, transparent 68%);
+}
+
+.cursor-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+html.custom-cursor,
+html.custom-cursor * {
+  cursor: none !important;
 }
 
 ::selection {
