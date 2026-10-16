@@ -1,0 +1,25 @@
+export const profile = {
+  name: "Mohamed Amine Mzoughi",
+  givenName: "Mohamed Amine",
+  familyName: "Mzoughi",
+  title: "Full-Stack Web Developer",
+  years: 6,
+  location: "Tunis, Tunisia",
+  locality: "Tunis",
+  country: "TN",
+  email: "aminemzou49@gmail.com",
+  phone: "+216 95 373 448",
+  phoneHref: "tel:+21695373448",
+  linkedin: "https://www.linkedin.com/in/mohamed-amine-mzoughy/",
+  github: "https://github.com/mzoughy1",
+  availableForWork: true,
+  summary: [
+    "I deliver secure, scalable, high-performance web apps with Laravel, React, Next.js, Node.js, and Linux deployments.",
+    "50+ production projects for clients in Europe and MENA. I am strong at tight deadlines, financial transactions, infrastructure, client relations, and mentoring.",
+  ],
+  education: {
+    credential: "Bachelor in Administration Networks and Systems",
+    school: "Mahdia Institute of Computer Science",
+    year: "2017",
+  },
+} as const;
