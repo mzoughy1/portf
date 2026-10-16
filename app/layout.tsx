@@ -3,6 +3,7 @@ import { Fraunces, IBM_Plex_Mono, Outfit } from "next/font/google";
 import { CursorGlow } from "@/components/cursor-glow";
 import { Nav } from "@/components/nav";
 import { Providers } from "@/components/providers";
+import { Welcome } from "@/components/welcome";
 import { profile } from "@/content/profile";
 import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
@@ -84,12 +85,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
       </head>
       <body className="min-h-dvh font-sans antialiased">
+        <div className="bg-field" aria-hidden="true">
+          <span />
+          <span />
+        </div>
         <Providers>
           <a className="skip-link" href="#main">
             Skip to content
           </a>
           <CursorGlow />
           <Nav />
+          <Welcome />
           {children}
         </Providers>
       </body>

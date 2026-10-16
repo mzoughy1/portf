@@ -3,10 +3,10 @@
 import { useEffect, useRef } from "react";
 
 export function CursorGlow() {
-  const ref = useRef<HTMLDivElement>(null);
+  const glow = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const node = ref.current;
+    const node = glow.current;
     if (!node) return;
 
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -15,7 +15,7 @@ export function CursorGlow() {
 
     const onMove = (event: PointerEvent) => {
       node.style.opacity = "1";
-      node.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+      node.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -23,12 +23,11 @@ export function CursorGlow() {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      aria-hidden="true"
-      className="pointer-events-none fixed top-0 left-0 z-30 opacity-0"
-    >
-      <div className="size-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--accent)_0%,transparent_68%)] opacity-20" />
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-30 overflow-hidden">
+      <div
+        ref={glow}
+        className="absolute top-0 left-0 size-56 rounded-full bg-[radial-gradient(circle,var(--accent)_0%,transparent_68%)] opacity-0"
+      />
     </div>
   );
 }

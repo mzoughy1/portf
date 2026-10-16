@@ -52,6 +52,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -73,6 +74,49 @@ body::before {
   background-image: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0);
   background-size: 22px 22px;
   mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+.bg-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-field span {
+  position: absolute;
+  border-radius: 999px;
+  background: var(--accent);
+  filter: blur(70px);
+  opacity: 0.16;
+  animation: drift 32s ease-in-out infinite alternate;
+}
+
+.bg-field span:first-child {
+  top: -12%;
+  left: -8%;
+  width: min(42rem, 70vw);
+  height: min(42rem, 70vw);
+}
+
+.bg-field span:last-child {
+  right: -12%;
+  bottom: -8%;
+  width: min(34rem, 60vw);
+  height: min(34rem, 60vw);
+  opacity: 0.1;
+  animation-duration: 44s;
+  animation-delay: -12s;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4vw, 3vh, 0) scale(1.06);
+  }
 }
 
 body > * {
